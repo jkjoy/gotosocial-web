@@ -1,0 +1,160 @@
+{{- /*
+// GoToSocial
+// Copyright (C) GoToSocial Authors admin@gotosocial.org
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/ -}}
+
+{{- define "profileMovedTo" -}}
+{{- with .account.Moved }}
+<div class="moved-to">
+    <b>
+        ℹ️此帐户已永久移动到
+        <a
+            href="{{ .URL }}"
+            class="nounderline"
+            rel="nofollow noreferrer noopener"
+            target="_blank"
+        >
+            @{{ .Username }}
+        </a>
+    </b>
+</div>
+{{- end }}
+{{- end -}}
+
+{{- with . }}
+<main class="profile">
+    <h2 class="sr-only">为 {{ .account.Username -}} 创建个人资料</h2>
+    <section class="profile-header" role="region" aria-label="Basic info">
+        {{- if .account.Moved }}
+        {{- include "profileMovedTo" . | indent 2 }}
+        {{- end }}
+        <div class="header-image-wrapper">
+            <img
+                src="{{- .account.Header -}}"
+                alt="Header for {{ .account.Username -}}"
+                title="Header for {{ .account.Username -}}"
+            />
+        </div>
+        <div class="basic-info">
+            <a class="avatar" href="{{- .account.Avatar -}}">
+                <img
+                    src="{{- .account.Avatar -}}"
+                    alt="Avatar for {{ .account.Username -}}"
+                    title="Avatar for {{ .account.Username -}}"
+                />
+            </a>
+            <dl class="namerole">
+                <dt class="sr-only">显示名称</dt>
+                <dd class="displayname text-cutoff">
+                    {{- if .account.DisplayName -}}
+                    {{- emojify .account.Emojis (escape .account.DisplayName) -}}
+                    {{- else -}}
+                    {{- .account.Username -}}
+                    {{- end -}}
+                </dd>
+                <dt class="sr-only">用户名</dt>
+                <dd class="username text-cutoff">@{{- .account.Username -}}@{{- .instance.AccountDomain -}}</dd>
+                {{- if and (.account.Role) (ne .account.Role.Name "user") }}
+                <dt class="sr-only">身份</dt>
+                <dd class="role {{ .account.Role.Name -}}">{{- .account.Role.Name -}}</dd>
+                {{- end }}
+            </dl>
+        </div>
+    </section>
+    <div class="column-split">
+        <section class="about-user" role="region" aria-labelledby="about-header">
+            <div class="col-header">
+                <h3 id="about-header">关于<span class="sr-only">&nbsp;{{- .account.Username -}}</span></h3>
+            </div>
+            {{- if .account.Fields }}
+            {{- include "profile_fields.tmpl" . | indent 3 }}
+            {{- end }}
+            <h4 class="sr-only">个人资料</h4>
+            <div class="bio">
+                {{- if .account.Note }}
+                {{ emojify .account.Emojis (noescape .account.Note) }}
+                {{- else }}
+                <p>This GoToSocial user hasn't written a bio yet!</p>
+                {{- end }}
+            </div>
+            <h4 class="sr-only">统计</h4>
+            <dl class="accountstats">
+                <dt>加入时间</dt>
+                <dd><time datetime="{{- .account.CreatedAt -}}">{{- .account.CreatedAt | timestampVague -}}</time></dd>
+                <dt>发布动态</dt>
+                <dd>{{- .account.StatusesCount -}}</dd>
+                <dt>我关注的</dt>
+                <dd>{{- if .account.HideCollections -}}<i>hidden</i>{{- else -}}{{- .account.FollowersCount -}}{{- end -}}</dd>
+                <dt>关注我的</dt>
+                <dd>{{- if .account.HideCollections -}}<i>hidden</i>{{- else -}}{{- .account.FollowingCount -}}{{- end -}}</dd>
+            </dl>
+        </section>
+        <div class="statuses-wrapper" role="region" aria-label="Posts by {{ .account.Username -}}">
+            {{- if .pinned_statuses }}
+            <section class="pinned statuses" aria-labelledby="pinned">
+                <div class="col-header">
+                    <h3 id="pinned">置顶内容</h3>
+                    <a href="#recent">跳转</a>
+                </div>
+                <div class="thread">
+                    {{- range .pinned_statuses }}
+                    <article
+                        class="status expanded"
+                        {{- includeAttr "status_attributes.tmpl" . | indentAttr 6  }}
+                    >
+                        {{- include "status.tmpl" . | indent 6 }}
+                    </article>
+                    {{- end }}
+                </div>
+            </section>
+            {{- end }}
+            <section class="recent statuses" aria-labelledby="recent">
+                <div class="col-header">
+                    <h3 id="recent" tabindex="-1">最近发布</h3>
+                    {{- if .rssFeed }}
+                    <a href="{{- .rssFeed -}}" class="rss-icon" aria-label="RSS feed">
+                        <i class="fa fa-rss-square" aria-hidden="true"></i>
+                    </a>
+                    {{- end }}
+                </div>
+                <div class="thread">
+                    {{- if not .statuses }}
+                    <div data-nosnippet class="nothinghere">暂无内容</div>
+                    {{- else }}
+                    {{- range .statuses }}
+                    <article
+                        class="status expanded"
+                        {{- includeAttr "status_attributes.tmpl" . | indentAttr 6  }}
+                    >
+                        {{- include "status.tmpl" . | indent 6 }}
+                    </article>
+                    {{- end }}
+                    {{- end }}
+                </div>
+                <nav class="backnextlinks">
+                    {{- if .show_back_to_top }}
+                    <a href="/@{{- .account.Username -}}">回到顶部</a>
+                    {{- end }}
+                    {{- if .statuses_next }}
+                    <a href="{{- .statuses_next -}}" class="next">显示更多</a>
+                    {{- end }}
+                </nav>
+            </section>
+        </div>
+    </div>
+</main>
+{{- end }}

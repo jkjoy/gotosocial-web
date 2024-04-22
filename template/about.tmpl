@@ -1,0 +1,200 @@
+{{- /*
+// GoToSocial
+// Copyright (C) GoToSocial Authors admin@gotosocial.org
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/ -}}
+
+{{- define "description" -}}
+{{- if .instance.Description }}
+{{ .instance.Description | noescape }}
+{{- else }}
+<p>此实例暂无描述.</p>
+{{- end }}
+{{- end -}}
+
+{{- define "termsAndConditions" -}}
+{{- if .instance.Terms }}
+{{ .instance.Terms | noescape }}
+{{- else }}
+<p>此实例暂无制定规则条款.</p>
+{{- end }}
+{{- end -}}
+
+{{- define "languages" -}}
+{{- if .languages }}
+<p>本实例使用以下语言:</p>
+<ol>
+    {{- range .languages }}
+    <li>{{- . -}}</li>
+    {{- end }}
+</ol>
+{{- else }}
+<p>本实例暂无首选语言.</p> 
+{{- end }}
+{{- end -}}
+
+{{- define "rules" -}}
+{{- if .instance.Rules }}
+<p>本实例使用以下规则:</p>
+<ol>
+    {{- range .instance.Rules }}
+    <li>{{- .Text -}}</li>
+    {{- end }}
+</ol>
+{{- else }}
+<p>本实例暂无任何规则.</p>
+{{- end }}
+{{- end -}}
+
+{{- define "registrationLimits" -}}
+{{- if .instance.Registrations -}}
+    本实例启用注册.<br/>
+    {{- if .instance.ApprovalRequired -}}
+        注册需要得到管理员审批.
+    {{- else -}}
+        注册不需要管理员审核; 新注册将自动通过 (需要邮件验证).
+    {{- end -}}
+{{- else -}}
+    本实例禁止注册.
+{{- end -}}
+{{- end -}}
+
+{{- define "customCSSLimits" -}}
+{{- if .instance.Configuration.Accounts.AllowCustomCSS -}}
+允许用户自定义设置<a href="https://docs.gotosocial.org/en/latest/user_guide/custom_css/" target="_blank" rel="noopener noreferrer">Custom CSS</a> .
+{{- else -}}
+<a href="https://docs.gotosocial.org/en/latest/user_guide/custom_css/" target="_blank" rel="noopener noreferrer">Custom CSS</a>用户未启用自定义.
+{{- end -}}
+{{- end -}}
+
+{{- define "statusLimits" -}}
+状态可以包含&nbsp;
+{{- .instance.Configuration.Statuses.MaxCharacters }} 个字符,以及最多&nbsp;
+{{- .instance.Configuration.Statuses.MaxMediaAttachments }} 个多媒体附件.
+{{- end -}}
+
+{{- define "pollLimits" -}}
+投票可以最多&nbsp;
+{{- .instance.Configuration.Polls.MaxOptions }} 个选项, 以及每个选项最多&nbsp;
+{{- .instance.Configuration.Polls.MaxCharactersPerOption }} 个字符.
+{{- end -}}
+
+{{- with . }}
+<main class="about">
+    <nav class="about-section" aria-labelledby="toc">
+        <h3 id="toc">联系方式</h3>
+        <div class="about-section-contents">
+            <ol>
+                <li><a href="#about">关于 {{ .instance.Title -}}</a></li>
+                <li><a href="#contact">联系</a></li>
+                <li><a href="#features">特性</a></li>
+                <li><a href="#languages">语言</a></li>
+                <li><a href="#rules">规则</a></li>
+                <li><a href="#terms">条款声明</a></li>
+                <li><a href="#moderated-servers">服务器</a></li>
+            </ol>
+        </div>
+    </nav>
+    <section class="about-section" role="region" aria-labelledby="about">
+        <h3 id="about">关于 {{ .instance.Title -}}</h3>
+        <div class="about-section-contents">
+            {{- with . }}
+            {{- include "description" . | indent 3 }}
+            {{- end }}
+        </div>
+    </section>
+    <section class="about-section" role="region" aria-labelledby="contact">
+        <h3 id="contact">联系管理员</h3>
+        <div class="about-section-contents">
+            {{- if .instance.ContactAccount }}
+            <a href="{{- .instance.ContactAccount.URL -}}" class="account-card">
+                <img class="avatar" src="{{- .instance.ContactAccount.Avatar -}}" alt=""/>
+                <h3>
+                    {{- if .instance.ContactAccount.DisplayName -}}
+                    {{- emojify .instance.ContactAccount.Emojis (escape .instance.ContactAccount.DisplayName) -}}
+                    {{- else -}}
+                    {{- .instance.ContactAccount.Username -}}
+                    {{- end -}}
+                </h3>
+                <span>@{{- .instance.ContactAccount.Username -}}</span>
+            </a>
+            {{- else }}
+            <p>本实例未设置用户联系人.</p>
+            {{- end }}
+            {{- if .instance.Email }}
+            <p>Email: <a href="mailto:{{- .instance.Email -}}">{{- .instance.Email -}}</a></p>
+            {{- else }}
+            <p>本实例暂无设置 email 联系方式.</p>
+            {{- end }}
+        </div>
+    </section>
+    <section class="about-section" role="region" aria-labelledby="features">
+        <h3 id="features">实例特性</h3>
+        <div class="about-section-contents">
+            <ul>
+                <li>{{- template "registrationLimits" . -}}</li>
+                <li>{{- template "customCSSLimits" . -}}</li>
+                <li>{{- template "statusLimits" . -}}</li>
+                <li>{{- template "pollLimits" . -}}</li>
+            </ul>
+        </div>
+    </section>
+    <section class="about-section" role="region" aria-labelledby="languages">
+        <h3 id="languages">语言</h3>
+        <div class="about-section-contents">
+            {{- with . }}
+            {{- include "languages" . | indent 3 }}
+            {{- end }}
+        </div>
+    </section>
+    <section class="about-section" role="region" aria-labelledby="rules">
+        <h3 id="rules">实例规则</h3>
+        <div class="about-section-contents">
+            {{- with . }}
+            {{- include "rules" . | indent 3 }}
+            {{- end }}
+        </div>
+    </section>
+    <section class="about-section" role="region" aria-labelledby="terms">
+        <h3 id="terms">条款与声明</h3>
+        <div class="about-section-contents">
+            {{- with . }}
+            {{- include "termsAndConditions" . | indent 3 }}
+            {{- end }}
+        </div>
+    </section>
+    <section class="about-section" role="region" aria-labelledby="moderated-servers">
+        <h3 id="moderated-servers">服务器</h3>
+        <div class="about-section-contents">
+            <p>
+                ActivityPub实例通过在网络上交换数据与其他实例联合。交换的数据包括帐户、状态、喜欢、赞和媒体附件等。可以通过实例管理员的设置来阻止特定域上的实例的数据交换。当一个实例被另一个实例域屏蔽时
+            </p>
+            <ul>
+                <li>实例中的任何现有数据都将从执行屏蔽的实例的存储中删除.</li>
+                <li>两个实例将不能相互交互。</li>
+                <li>不会在实例上创建来自被屏蔽实例的新数据.</li>
+            </ul>
+            <p>
+                {{- if .blocklistExposed }}
+                <a href="/about/suspended">查看本实例屏蔽的域名</a>
+                {{- else }}
+                此实例不公开共享其被阻止的域列表.
+                {{- end }}
+            </p>
+        </div>
+    </section>
+</main>
+{{- end }}

@@ -1,0 +1,47 @@
+{{- /*
+// GoToSocial
+// Copyright (C) GoToSocial Authors admin@gotosocial.org
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/ -}}
+
+{{- with . }}
+<main>
+    <form action="/oauth/finalize" method="POST">
+        <h1> {{ .name -}} 您好!</h1>
+        <p>
+            你要注册的是 {{ .instance.Title -}}.
+            为了确保您获得最佳体验，我们需要您提供一些额外的细节.
+        </p>
+        <div class="callout">
+            <p class="callout-title">Important</p>
+            <p>由于ActivityPub标准,您<strong>不能</strong> 在设置好用户名后再更改用户名</p>
+        </div>
+        <div class="labelinput">
+            <label for="username">用户名<small>(必须使用英文,数字或者下划线)</small></label>
+            <input 
+                type="text"
+                class="form-control"
+                name="username"
+                required
+                placeholder="请输入用户名"
+                value="{{- .preferredUsername -}}"
+            >
+        </div>
+        <input type="hidden" name="name" value="{{- .name -}}">
+        <button type="submit" style="width: 100%; margin-top: 1rem;" class="btn btn-success">提交</button>
+    </form>
+</main>
+{{- end }}

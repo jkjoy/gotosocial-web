@@ -1,0 +1,36 @@
+{{- /*
+// GoToSocial
+// Copyright (C) GoToSocial Authors admin@gotosocial.org
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/ -}}
+
+{{- with . }}
+<main>
+    <section>
+        <h1>404: Not Found</h1>
+        <p>
+            GoToSocial仅通过网络提供公共状态。
+        </p>
+        <p>
+如果您通过点击状态链接到达此页面,很可能状态不是Public。你可以试试在客户端的搜索栏中输入状态URL，从您的帐户查看状态。如果没有工作，有可能状态已被删除作者，你没有权限查看它，或者它根本不存在.
+        </p>
+        <p>
+            如果您认为这个404是一个错误，您可以联系实例管理员. 向他们提供以下资料
+            request ID: <code>{{- .requestID -}}</code>.
+        </p>
+    </section>
+</main>
+{{- end }}

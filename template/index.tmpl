@@ -1,0 +1,40 @@
+{{- /*
+// GoToSocial
+// Copyright (C) GoToSocial Authors admin@gotosocial.org
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/ -}}
+
+{{- define "shortDescription" -}}
+{{- if .instance.ShortDescription }}
+{{ .instance.ShortDescription | noescape }}
+{{- else }}
+<p>暂无对本实例的描述.</p>
+{{- end }}
+{{- end -}}
+
+{{- with . }}
+<main class="about">
+    <section class="about-section" role="region" aria-labelledby="about">
+        <h3 id="about">关于实例</h3>
+        <div class="about-section-contents">
+            {{- include "shortDescription" . | indent 3 }}
+            <a href="/about">查看更多</a>
+        </div>
+    </section>
+    {{- include "index_what_is_this.tmpl" . | indent 1 }}
+    {{- include "index_apps.tmpl" . | indent 1 }}
+</main>
+{{- end }}

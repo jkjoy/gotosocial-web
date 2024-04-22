@@ -1,0 +1,65 @@
+{{- /*
+// GoToSocial
+// Copyright (C) GoToSocial Authors admin@gotosocial.org
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/ -}}
+
+{{- with . }}
+<section role="region" class="about-section what-is-this" aria-labelledby="what-is-this">
+    <h3 id="what-is-this">这是什么?</h3>
+    <div class="about-section-contents">
+        <p>
+            您正在浏览的是一个GoToSocial实例.GoToSocial是基于 "fediverse"网络的一个开源的联合的分布式的微博软件.
+        </p><p>
+GoToSocial版本 
+            <a
+                href="https://github.com/superseriousbusiness/gotosocial"
+                class="nounderline"
+                rel="nofollow noreferrer noopener"
+                target="_blank"
+            >
+                
+                {{ .instance.Version }}
+              
+            </a>
+</p>
+        <h4 id="what-is-an-instance">什么是实例?</h4>
+        <p>
+           “实例”是一个术语，通常用于集群中的一个节点。每个实例有自己的域名、用户、文化、规则和设置。   实例通过使用 ActivityPub 协议实现交换数据.
+        </p>
+        <p>
+           从理论上讲，每个实例可以与其他实例对接，可以通过一个分散的网络产生交互, 且可以不隶属于同一个服务器。可以通过成千上万个不同的实例，将数百万用户联系起来。
+        </p>
+        <p>
+           Fediverse 是去中心化社交网络的统称，由多个独立运行的服务器组成，这些服务器之间可以互相通信。Fediverse中的各个服务器使用ActivityPub开源协议，允许用户在不同平台之间互动。
+
+
+        </p>
+        <h4 id="how-do-i-join-the-fediverse">如何加入Fediverse?</h4>
+        <p>
+            你可以通过运行自己的 ActivityPub 软件实例来加入 Fediverse ，或者找到一个你感兴趣的现有实例注册账户。
+        </p>
+        <p>
+            为了帮助您找到适合您的实例，您可以尝试以下工具之一:
+        </p>
+        <ul>
+            <li><a href="https://fediverse.observer" rel="nofollow noreferrer noopener" target="_blank">Fediverse Observer </a></li>
+            <li><a href="https://fedidb.org/network" rel="nofollow noreferrer noopener" target="_blank">FediDB  </a></li>
+        </ul>
+    </div>
+
+</section>
+{{- end }}
